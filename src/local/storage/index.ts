@@ -56,9 +56,9 @@ export class Fs extends Storage implements StorageInterface {
 
             this.createDirIfNotExists(_path);
             await fs.writeFile(_path, content);
-            debug(`Os dados foram escritos em ${filePath}`);
+            debug(`File sent to ${filePath}`);
         } catch (error) {
-            debug(`Erro ao escrever os dados em ${filePath}: ${error}`);
+            debug(`Fail sending file ${filePath}: ${error}`);
         }
     }
 
@@ -72,10 +72,10 @@ export class Fs extends Storage implements StorageInterface {
         try {
             _path = path.join(options.basePath || this.options.basePath, filePath);
             await fs.rm(_path, { force: true });
-            debug(`O arquivo ${_path} foi excluído`);
+            debug(`Deleted file ${_path}`);
             return StorageOutputEnum.Success;
         } catch (error) {
-            debug(`Erro ao excluir o arquivo ${_path}: ${error}`);
+            debug(`Warning: Fail deleting file ${_path}: ${error}`);
             return StorageOutputEnum.NotFound;
         }
     }
@@ -86,10 +86,10 @@ export class Fs extends Storage implements StorageInterface {
         try {
             _path = path.join(options.basePath || this.options.basePath, directoryPath);
             await fs.rm(_path, { recursive: true, force: true });
-            debug(`O diretório ${_path} foi excluído`);
+            debug(`Deleted directory ${_path}`);
             return StorageOutputEnum.Success;
         } catch (error) {
-            debug(`Erro ao excluir o diretório ${_path}: ${error}`);
+            debug(`Warning: Fail deleting directory ${_path}: ${error}`);
             return StorageOutputEnum.NotFound;
         }
     }
@@ -102,7 +102,7 @@ export class Fs extends Storage implements StorageInterface {
             const objects = await fs.readdir(_path);
             return map(objects, (name) => [directoryPath, name].join('/'));
         } catch (error) {
-            if (!options.silent) debug(`Erro ao ler o diretório ${_path}`, error);
+            if (!options.silent) debug(`Fail reading directory ${_path}`, error);
             return null;
         }
     }
